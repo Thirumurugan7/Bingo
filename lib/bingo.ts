@@ -16,6 +16,12 @@ export function generateBingoCard(playerNumbers: number[], myNumber: number): nu
   return grid;
 }
 
+/** Returns a card with uncrossed numbers hidden (null). FREE (0) and crossed numbers stay visible. */
+export function maskBingoCard(card: number[][], crossedOff: number[]): (number | null)[][] {
+  const crossed = new Set([...crossedOff, 0]);
+  return card.map((row) => row.map((num) => (crossed.has(num) ? num : null)));
+}
+
 export function checkBingo(card: number[][], crossedOff: number[]): boolean {
   const crossed = new Set([...crossedOff, 0]);
 

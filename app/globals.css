@@ -76,6 +76,11 @@ body {
   border-color: var(--pizza-gold);
 }
 
+.bingo-cell.hidden {
+  background: rgba(255, 255, 255, 0.03);
+  border-style: dashed;
+}
+
 /* Stamp effect for crossed cells */
 .bingo-cell.crossed::after {
   content: "";

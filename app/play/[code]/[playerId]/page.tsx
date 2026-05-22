@@ -101,7 +101,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
     );
   }
 
-  const card: number[][] = player.bingoCard ? JSON.parse(player.bingoCard) : [];
+  const card: (number | null)[][] = player.bingoCard ? JSON.parse(player.bingoCard) : [];
   const crossedOff: number[] = player.crossedOff ? JSON.parse(player.crossedOff) : [];
   const crossedSet = new Set([...crossedOff, 0]);
   const completedQuestIds = new Set(player.questCompletions.map((qc) => qc.quest.id));
@@ -265,11 +265,12 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
             <div className="bingo-grid">
               {card.flat().map((num, idx) => {
                 const isCenter = idx === 12;
-                const isCrossed = crossedSet.has(num);
+                const isHidden = num === null;
+                const isCrossed = !isHidden && !isCenter && crossedSet.has(num);
                 return (
                   <div
                     key={idx}
-                    className={`bingo-cell ${isCenter ? "free" : isCrossed ? "crossed stamp-in" : ""}`}
+                    className={`bingo-cell ${isCenter ? "free" : isCrossed ? "crossed stamp-in" : isHidden ? "hidden" : ""}`}
                   >
                     {isCenter ? (
                       <span className="font-malam" style={{ fontSize: "clamp(1rem, 4vw, 1.4rem)" }}>🍕</span>
@@ -280,9 +281,10 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
                       </>
                     ) : (
                       <span
-                        style={{color: "var(--pizza-cream)", fontSize: "clamp(1rem, 4.5vw, 1.4rem)" }}
+                        className="font-malam"
+                        style={{ color: "var(--pizza-muted)", fontSize: "clamp(1.2rem, 5vw, 1.6rem)", fontWeight: "bold" }}
                       >
-                        {num}
+                        ?
                       </span>
                     )}
                   </div>
@@ -291,7 +293,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
             </div>
 
             <p className="font-malam text-xs mt-3 text-center" style={{ color: "var(--pizza-muted)" }}>
-              Find players with these numbers · Connect to cross off
+              Numbers stay hidden until you connect with someone on your card
             </p>
           </div>
         )}
@@ -380,7 +382,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
               <button onClick={() => setModal(null)} style={{ color: "var(--pizza-muted)" }}>✕</button>
             </div>
             <p className="font-malam text-xs" style={{ color: "var(--pizza-muted)" }}>
-              Find a person with a number on your card → ask their number → write something about them
+              Meet someone, ask their player number, and connect — if they&apos;re on your card, the number is revealed and crossed off
             </p>
             <div>
               <label className="block text-xs tracking-widest uppercase mb-2" style={{ color: "var(--pizza-muted)" }}>
