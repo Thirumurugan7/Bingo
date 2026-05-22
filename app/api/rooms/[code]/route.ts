@@ -1,23 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getRoomWithDetails } from "@/lib/db";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
 
-  const room = await prisma.room.findUnique({
-    where: { code: code.toUpperCase() },
-    include: {
-      players: {
-        orderBy: { number: "asc" },
-        include: {
-          connections: { include: { target: { select: { id: true, name: true, number: true } } } },
-          questCompletions: { include: { quest: true } },
-        },
-      },
-      quests: true,
-    },
-  });
+  const room = await getRoomWithDetails(code.toUpperCase());
 
   if (!room) return NextResponse.json({ error: "Room not found" }, { status: 404 });
-  return NextResponse.json(room);
+  const { hostPasswordHash, ...publicRoom } = room as typeof room & { hostPasswordHash?: string | null };
+  return NextResponse.json({
+    ...publicRoom,
+    requiresHostPassword: Boolean(hostPasswordHash),
+  });
 }

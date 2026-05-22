@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { createRoom, findRoomByCode } from "@/lib/db";
 import { generateRoomCode } from "@/lib/bingo";
+import { hashPassword } from "@/lib/host-auth";
+
+const CODE_PATTERN = /^[A-Z0-9]{4,8}$/;
 
 const DEFAULT_QUESTS = [
+  {
+    title: "Follow the Host on X",
+    description: "Follow @fabianferno on Twitter/X — x.com/fabianferno",
+    url: "https://x.com/fabianferno",
+  },
   {
     title: "Follow PizzaDAO on X",
     description: "Follow @thepizzadao on Twitter/X and take a screenshot",
@@ -26,20 +34,31 @@ const DEFAULT_QUESTS = [
 ];
 
 export async function POST(req: NextRequest) {
-  const { name } = await req.json();
+  const { name, code: rawCode, password } = await req.json();
   if (!name) return NextResponse.json({ error: "Name required" }, { status: 400 });
+  if (!password || String(password).length < 4) {
+    return NextResponse.json({ error: "Host password must be at least 4 characters" }, { status: 400 });
+  }
 
-  const code = generateRoomCode();
+  const code = rawCode
+    ? String(rawCode).trim().toUpperCase()
+    : generateRoomCode();
 
-  const room = await prisma.room.create({
-    data: {
-      code,
-      name,
-      quests: {
-        create: DEFAULT_QUESTS,
-      },
-    },
-    include: { quests: true },
+  if (!CODE_PATTERN.test(code)) {
+    return NextResponse.json(
+      { error: "Room code must be 4–8 letters or numbers" },
+      { status: 400 }
+    );
+  }
+
+  const existing = await findRoomByCode(code);
+  if (existing) return NextResponse.json({ error: "Room code already taken" }, { status: 409 });
+
+  const room = await createRoom({
+    code,
+    name,
+    hostPasswordHash: hashPassword(String(password)),
+    quests: DEFAULT_QUESTS,
   });
 
   return NextResponse.json(room);

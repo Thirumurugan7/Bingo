@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import {
+  createConnection,
+  findConnection,
+  findPlayerById,
+  findPlayerByRoomAndNumber,
+  updatePlayer,
+} from "@/lib/db";
 import { checkBingo } from "@/lib/bingo";
 
 export async function POST(req: NextRequest) {
@@ -8,19 +14,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "playerId, targetNumber, and note required" }, { status: 400 });
   }
 
-  const player = await prisma.player.findUnique({ where: { id: playerId } });
+  const player = await findPlayerById(playerId);
   if (!player) return NextResponse.json({ error: "Player not found" }, { status: 404 });
 
-  const target = await prisma.player.findFirst({
-    where: { roomId: player.roomId, number: Number(targetNumber) },
-  });
+  const target = await findPlayerByRoomAndNumber(player.roomId, Number(targetNumber));
   if (!target) return NextResponse.json({ error: "No player with that number in this room" }, { status: 404 });
   if (target.id === playerId) return NextResponse.json({ error: "Cannot connect with yourself" }, { status: 400 });
 
-  // check if already connected
-  const existing = await prisma.connection.findUnique({
-    where: { playerId_targetId: { playerId, targetId: target.id } },
-  });
+  const existing = await findConnection(playerId, target.id);
   if (existing) return NextResponse.json({ error: "Already connected with this player" }, { status: 400 });
 
   const card: number[][] = JSON.parse(player.bingoCard || "[]");
@@ -31,16 +32,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "That number is not on your bingo card" }, { status: 400 });
   }
 
-  await prisma.connection.create({
-    data: { playerId, targetId: target.id, note: note.trim() },
-  });
+  await createConnection({ playerId, targetId: target.id, note: note.trim() });
 
   const newCrossedOff = [...new Set([...crossedOff, target.number])];
   const hasBingo = card.length > 0 ? checkBingo(card, newCrossedOff) : false;
 
-  const updated = await prisma.player.update({
-    where: { id: playerId },
-    data: { crossedOff: JSON.stringify(newCrossedOff), hasBingo },
+  const updated = await updatePlayer(playerId, {
+    crossedOff: JSON.stringify(newCrossedOff),
+    hasBingo,
   });
 
   return NextResponse.json({ success: true, crossedOff: newCrossedOff, hasBingo: updated.hasBingo });

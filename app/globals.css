@@ -1,5 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap");
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Malam Poek";
+  src: url("/Malam Poek.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --pizza-black: #0a0a0a;
@@ -19,7 +27,8 @@
 @theme inline {
   --color-background: var(--pizza-black);
   --color-foreground: var(--pizza-cream);
-  --font-display: "Bebas Neue", cursive;
+  --font-display: "Malam Poek", cursive;
+  --font-malam: "Malam Poek", cursive;
   --font-mono: "Space Mono", monospace;
 }
 
@@ -91,7 +100,7 @@ body::before {
 .btn-primary {
   background: var(--pizza-orange);
   color: #fff;
-  font-family: "Bebas Neue", cursive;
+  font-family: var(--font-malam);
   font-size: 1.25rem;
   letter-spacing: 0.1em;
   padding: 0.75rem 2rem;
@@ -117,7 +126,7 @@ body::before {
 .btn-secondary {
   background: transparent;
   color: var(--pizza-cream);
-  font-family: "Bebas Neue", cursive;
+  font-family: var(--font-malam);
   font-size: 1.25rem;
   letter-spacing: 0.1em;
   padding: 0.75rem 2rem;

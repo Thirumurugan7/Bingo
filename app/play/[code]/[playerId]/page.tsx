@@ -93,7 +93,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-3">🍕</div>
-          <p className="tracking-widest uppercase" style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-muted)" }}>
+          <p className="font-malam tracking-widest uppercase" style={{color: "var(--pizza-muted)" }}>
             Loading...
           </p>
         </div>
@@ -109,13 +109,12 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
 
   return (
     <main
-      style={{
+      className="font-malam" style={{
         background: "var(--pizza-black)",
         display: "flex",
         flexDirection: "column",
         height: "100dvh",
-        overflow: "hidden",
-      }}
+        overflow: "hidden" }}
     >
       {/* Bingo celebration overlay */}
       {justBingo && (
@@ -127,11 +126,11 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
           <div className="text-8xl mb-4">🎉</div>
           <div
             className="text-7xl uppercase tracking-wider text-center"
-            style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-gold)" }}
+            style={{color: "var(--pizza-gold)" }}
           >
             BINGO!
           </div>
-          <p className="mt-4 text-lg" style={{ color: "var(--pizza-cream)" }}>
+          <p className="font-malam mt-4 text-lg" style={{ color: "var(--pizza-cream)" }}>
             You got bingo, {player.name}! 🍕
           </p>
           <p className="mt-8 text-sm" style={{ color: "var(--pizza-muted)" }}>tap to dismiss</p>
@@ -146,22 +145,22 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
         <div className="min-w-0 flex-1 mr-3">
           <div
             className="uppercase tracking-widest truncate"
-            style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-orange)", fontSize: "clamp(1.2rem, 6vw, 1.8rem)" }}
+            style={{color: "var(--pizza-orange)", fontSize: "clamp(1.2rem, 6vw, 1.8rem)" }}
           >
             🍕 PizzaDAO Bingo
           </div>
-          <div className="text-xs truncate" style={{ color: "var(--pizza-muted)" }}>
+          <div className="font-malam text-xs truncate" style={{ color: "var(--pizza-muted)" }}>
             {player.room.name} · {code}
           </div>
         </div>
         <div className="text-right flex-shrink-0">
           <div
             className="font-bold"
-            style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-gold)", fontSize: "clamp(1.5rem, 8vw, 2.2rem)" }}
+            style={{color: "var(--pizza-gold)", fontSize: "clamp(1.5rem, 8vw, 2.2rem)" }}
           >
             #{player.number}
           </div>
-          <div className="text-xs" style={{ color: "var(--pizza-muted)" }}>{player.name}</div>
+          <div className="font-malam text-xs" style={{ color: "var(--pizza-muted)" }}>{player.name}</div>
         </div>
       </div>
 
@@ -178,11 +177,11 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
             <div className="text-2xl mb-1">⏳</div>
             <div
               className="text-lg uppercase tracking-widest"
-              style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-gold)" }}
+              style={{color: "var(--pizza-gold)" }}
             >
               Waiting for host to start
             </div>
-            <p className="text-xs mt-1" style={{ color: "var(--pizza-muted)" }}>
+            <p className="font-malam text-xs mt-1" style={{ color: "var(--pizza-muted)" }}>
               Your number is <strong style={{ color: "var(--pizza-orange)" }}>#{player.number}</strong> — share it with others!
             </p>
           </div>
@@ -192,16 +191,14 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
         <div className="card-surface p-4">
           <h2
             className="text-xs tracking-widest uppercase mb-3"
-            style={{ color: "var(--pizza-muted)", fontFamily: "Bebas Neue, cursive", fontSize: "0.9rem" }}
+            style={{ color: "var(--pizza-muted)", fontSize: "0.9rem" }}
           >
             My Player Card
           </h2>
           <div className="flex items-center gap-3">
             <div
-              className="flex-shrink-0 flex items-center justify-center font-bold"
-              style={{
-                fontFamily: "Bebas Neue, cursive",
-                background: "var(--pizza-orange)",
+              className="font-malam flex-shrink-0 flex items-center justify-center font-bold"
+              style={{background: "var(--pizza-orange)",
                 color: "#fff",
                 fontSize: "clamp(1.6rem, 7vw, 2.5rem)",
                 width: "clamp(52px, 14vw, 68px)",
@@ -211,23 +208,23 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
               {player.number}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-bold truncate" style={{ color: "var(--pizza-cream)", fontFamily: "Bebas Neue, cursive", fontSize: "clamp(1.2rem, 5vw, 1.6rem)", letterSpacing: "0.05em" }}>
+              <div className="font-malam font-bold truncate" style={{ color: "var(--pizza-cream)", fontSize: "clamp(1.2rem, 5vw, 1.6rem)", letterSpacing: "0.05em" }}>
                 {player.name}
               </div>
-              <div className="text-xs mt-1" style={{ color: "var(--pizza-muted)" }}>
+              <div className="font-malam text-xs mt-1" style={{ color: "var(--pizza-muted)" }}>
                 {crossedOff.length} crossed · {player.connections.length} connections
               </div>
               {player.hasBingo && (
                 <div
                   className="text-xs mt-1 inline-block px-2 py-0.5"
-                  style={{ background: "var(--pizza-gold)", color: "#000", fontFamily: "Bebas Neue, cursive", letterSpacing: "0.1em" }}
+                  style={{ background: "var(--pizza-gold)", color: "#000", letterSpacing: "0.1em" }}
                 >
                   🏆 BINGO WINNER
                 </div>
               )}
             </div>
             {myQr && (
-              <img src={myQr} alt="My QR" className="flex-shrink-0" style={{ width: "clamp(48px, 12vw, 60px)", height: "clamp(48px, 12vw, 60px)", border: "2px solid var(--pizza-border)" }} />
+              <img src={myQr} alt="My QR" className="font-malam flex-shrink-0" style={{ width: "clamp(48px, 12vw, 60px)", height: "clamp(48px, 12vw, 60px)", border: "2px solid var(--pizza-border)" }} />
             )}
           </div>
         </div>
@@ -238,14 +235,14 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
             <div className="flex items-center justify-between mb-4">
               <h2
                 className="text-xs tracking-widest uppercase"
-                style={{ color: "var(--pizza-muted)", fontFamily: "Bebas Neue, cursive", fontSize: "0.9rem" }}
+                style={{ color: "var(--pizza-muted)", fontSize: "0.9rem" }}
               >
                 My Bingo Card
               </h2>
               {player.hasBingo && (
                 <span
-                  className="text-sm px-3 py-1 bingo-win"
-                  style={{ background: "var(--pizza-gold)", color: "#000", fontFamily: "Bebas Neue, cursive" }}
+                  className="font-malam text-sm px-3 py-1 bingo-win"
+                  style={{ background: "var(--pizza-gold)", color: "#000"}}
                 >
                   🏆 BINGO!
                 </span>
@@ -257,8 +254,8 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
               {["B", "I", "N", "G", "O"].map((l) => (
                 <div
                   key={l}
-                  className="text-center font-bold py-1"
-                  style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-orange)", fontSize: "clamp(0.9rem, 4vw, 1.2rem)", letterSpacing: "0.1em" }}
+                  className="font-malam text-center font-bold py-1"
+                  style={{color: "var(--pizza-orange)", fontSize: "clamp(0.9rem, 4vw, 1.2rem)", letterSpacing: "0.1em" }}
                 >
                   {l}
                 </div>
@@ -275,7 +272,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
                     className={`bingo-cell ${isCenter ? "free" : isCrossed ? "crossed stamp-in" : ""}`}
                   >
                     {isCenter ? (
-                      <span style={{ fontSize: "clamp(1rem, 4vw, 1.4rem)" }}>🍕</span>
+                      <span className="font-malam" style={{ fontSize: "clamp(1rem, 4vw, 1.4rem)" }}>🍕</span>
                     ) : isCrossed ? (
                       <>
                         <span style={{ fontSize: "clamp(0.9rem, 4vw, 1.3rem)" }}>🍅</span>
@@ -283,7 +280,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
                       </>
                     ) : (
                       <span
-                        style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-cream)", fontSize: "clamp(1rem, 4.5vw, 1.4rem)" }}
+                        style={{color: "var(--pizza-cream)", fontSize: "clamp(1rem, 4.5vw, 1.4rem)" }}
                       >
                         {num}
                       </span>
@@ -293,7 +290,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
               })}
             </div>
 
-            <p className="text-xs mt-3 text-center" style={{ color: "var(--pizza-muted)" }}>
+            <p className="font-malam text-xs mt-3 text-center" style={{ color: "var(--pizza-muted)" }}>
               Find players with these numbers · Connect to cross off
             </p>
           </div>
@@ -304,7 +301,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
           <div className="card-surface p-5">
             <h2
               className="text-xs tracking-widest uppercase mb-3"
-              style={{ color: "var(--pizza-muted)", fontFamily: "Bebas Neue, cursive", fontSize: "0.9rem" }}
+              style={{ color: "var(--pizza-muted)", fontSize: "0.9rem" }}
             >
               My Connections ({player.connections.length})
             </h2>
@@ -312,17 +309,17 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
               {player.connections.map((conn) => (
                 <div
                   key={conn.target.id}
-                  className="flex items-start gap-3 p-3"
+                  className="font-malam flex items-start gap-3 p-3"
                   style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--pizza-border)" }}
                 >
                   <span
                     className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold"
-                    style={{ background: "var(--pizza-orange)", color: "#fff", fontFamily: "Bebas Neue, cursive" }}
+                    style={{ background: "var(--pizza-orange)", color: "#fff"}}
                   >
                     {conn.target.number}
                   </span>
                   <div>
-                    <div className="text-sm font-bold" style={{ color: "var(--pizza-cream)" }}>
+                    <div className="font-malam text-sm font-bold" style={{ color: "var(--pizza-cream)" }}>
                       {conn.target.name}
                     </div>
                     <div className="text-xs mt-0.5 italic" style={{ color: "var(--pizza-muted)" }}>
@@ -345,8 +342,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
           background: "var(--pizza-dark)",
           borderTop: "1px solid var(--pizza-border)",
           padding: "0.75rem 1rem",
-          paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))",
-        }}
+          paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
       >
         <button
           className="btn-primary flex-1 justify-center py-3"
@@ -377,13 +373,13 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
             <div className="flex items-center justify-between">
               <h2
                 className="text-2xl uppercase tracking-widest"
-                style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-orange)" }}
+                style={{color: "var(--pizza-orange)" }}
               >
                 🤝 Connect with Someone
               </h2>
               <button onClick={() => setModal(null)} style={{ color: "var(--pizza-muted)" }}>✕</button>
             </div>
-            <p className="text-xs" style={{ color: "var(--pizza-muted)" }}>
+            <p className="font-malam text-xs" style={{ color: "var(--pizza-muted)" }}>
               Find a person with a number on your card → ask their number → write something about them
             </p>
             <div>
@@ -440,13 +436,13 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
             <div className="flex items-center justify-between">
               <h2
                 className="text-2xl uppercase tracking-widest"
-                style={{ fontFamily: "Bebas Neue, cursive", color: "var(--pizza-orange)" }}
+                style={{color: "var(--pizza-orange)" }}
               >
                 ⚡ Quests
               </h2>
               <button onClick={() => setModal(null)} style={{ color: "var(--pizza-muted)" }}>✕</button>
             </div>
-            <p className="text-xs" style={{ color: "var(--pizza-muted)" }}>
+            <p className="font-malam text-xs" style={{ color: "var(--pizza-muted)" }}>
               Complete quests to get wild-card crosses on your bingo card
             </p>
             <div className="space-y-3">
@@ -458,8 +454,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
                     className="p-4"
                     style={{
                       background: done ? "rgba(255,179,0,0.08)" : "rgba(255,255,255,0.03)",
-                      border: `1px solid ${done ? "var(--pizza-gold)" : "var(--pizza-border)"}`,
-                    }}
+                      border: `1px solid ${done ? "var(--pizza-gold)" : "var(--pizza-border)"}` }}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
@@ -487,7 +482,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string; p
                       {!done && (
                         <button
                           className="flex-shrink-0 btn-primary py-2 px-3 text-sm"
-                          style={{ fontFamily: "Bebas Neue, cursive", fontSize: "0.85rem" }}
+                          style={{fontSize: "0.85rem" }}
                           onClick={() => handleQuestComplete(quest.id)}
                           disabled={questLoading === quest.id}
                         >
