@@ -1,0 +1,234 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap");
+@import "tailwindcss";
+
+:root {
+  --pizza-black: #0a0a0a;
+  --pizza-dark: #141414;
+  --pizza-surface: #1e1e1e;
+  --pizza-border: #2e2e2e;
+  --pizza-orange: #ff4500;
+  --pizza-orange-dim: #cc3800;
+  --pizza-red: #cc1100;
+  --pizza-gold: #ffb300;
+  --pizza-gold-dim: #cc8f00;
+  --pizza-cream: #fff3e0;
+  --pizza-white: #ffffff;
+  --pizza-muted: #888888;
+}
+
+@theme inline {
+  --color-background: var(--pizza-black);
+  --color-foreground: var(--pizza-cream);
+  --font-display: "Bebas Neue", cursive;
+  --font-mono: "Space Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: var(--pizza-black);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--pizza-black);
+  color: var(--pizza-cream);
+  font-family: "Space Mono", monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Checkered pattern utility */
+.checkered {
+  background-image: repeating-conic-gradient(
+    rgba(255, 69, 0, 0.08) 0% 25%,
+    transparent 0% 50%
+  );
+  background-size: 20px 20px;
+}
+
+.checkered-sm {
+  background-image: repeating-conic-gradient(
+    rgba(255, 69, 0, 0.12) 0% 25%,
+    transparent 0% 50%
+  );
+  background-size: 10px 10px;
+}
+
+.bingo-cell.crossed {
+  background: var(--pizza-orange);
+  border-color: var(--pizza-orange);
+}
+
+.bingo-cell.free {
+  background: var(--pizza-gold);
+  border-color: var(--pizza-gold);
+}
+
+/* Stamp effect for crossed cells */
+.bingo-cell.crossed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+}
+
+/* Noise texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* Btn */
+.btn-primary {
+  background: var(--pizza-orange);
+  color: #fff;
+  font-family: "Bebas Neue", cursive;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 2rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  touch-action: manipulation;
+  min-height: 48px;
+}
+
+.btn-primary:hover {
+  background: var(--pizza-orange-dim);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--pizza-cream);
+  font-family: "Bebas Neue", cursive;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 2rem;
+  border: 2px solid var(--pizza-border);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+  min-height: 48px;
+}
+
+.btn-secondary:hover {
+  border-color: var(--pizza-orange);
+  color: var(--pizza-orange);
+}
+
+.input-pizza {
+  background: var(--pizza-surface);
+  border: 2px solid var(--pizza-border);
+  color: var(--pizza-cream);
+  font-family: "Space Mono", monospace;
+  font-size: 16px; /* prevents iOS auto-zoom */
+  padding: 0.75rem 1rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s ease;
+  -webkit-appearance: none;
+  border-radius: 0;
+  min-height: 48px;
+}
+
+.input-pizza:focus {
+  border-color: var(--pizza-orange);
+}
+
+.input-pizza::placeholder {
+  color: var(--pizza-muted);
+}
+
+.card-surface {
+  background: var(--pizza-surface);
+  border: 1px solid var(--pizza-border);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--pizza-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pizza-border);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pizza-orange);
+}
+
+@keyframes pulse-orange {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(255, 69, 0, 0); }
+}
+
+.bingo-win {
+  animation: pulse-orange 1.5s ease-in-out infinite;
+}
+
+@keyframes stamp {
+  0% { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.stamp-in {
+  animation: stamp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Safe area helpers for iPhone notch / home bar */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Bingo card fills its container width, cells are always square */
+.bingo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  width: 100%;
+}
+
+.bingo-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--pizza-border);
+  background: var(--pizza-surface);
+  transition: all 0.2s ease;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Modal sheet — slides from bottom on mobile */
+.modal-sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 85dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

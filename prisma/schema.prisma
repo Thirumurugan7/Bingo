@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  status    String   @default("waiting")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  players   Player[]
+  quests    Quest[]
+}
+
+model Player {
+  id               String            @id @default(cuid())
+  roomId           String
+  room             Room              @relation(fields: [roomId], references: [id])
+  name             String
+  number           Int
+  bingoCard        String            @default("[]")
+  crossedOff       String            @default("[]")
+  hasBingo         Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  connections      Connection[]      @relation("PlayerConnections")
+  connectedBy      Connection[]      @relation("ConnectedTo")
+  questCompletions QuestCompletion[]
+
+  @@unique([roomId, number])
+}
+
+model Connection {
+  id        String   @id @default(cuid())
+  playerId  String
+  player    Player   @relation("PlayerConnections", fields: [playerId], references: [id])
+  targetId  String
+  target    Player   @relation("ConnectedTo", fields: [targetId], references: [id])
+  note      String
+  createdAt DateTime @default(now())
+
+  @@unique([playerId, targetId])
+}
+
+model Quest {
+  id          String            @id @default(cuid())
+  roomId      String
+  room        Room              @relation(fields: [roomId], references: [id])
+  title       String
+  description String
+  url         String?
+  createdAt   DateTime          @default(now())
+  completions QuestCompletion[]
+}
+
+model QuestCompletion {
+  id        String   @id @default(cuid())
+  questId   String
+  quest     Quest    @relation(fields: [questId], references: [id])
+  playerId  String
+  player    Player   @relation(fields: [playerId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([questId, playerId])
+}
