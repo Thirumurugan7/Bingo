@@ -7,11 +7,6 @@ const CODE_PATTERN = /^[A-Z0-9]{4,8}$/;
 
 const DEFAULT_QUESTS = [
   {
-    title: "Follow the Host on X",
-    description: "Follow @fabianferno on Twitter/X — x.com/fabianferno",
-    url: "https://x.com/fabianferno",
-  },
-  {
     title: "Follow PizzaDAO on X",
     description: "Follow @thepizzadao on Twitter/X and take a screenshot",
     url: "https://twitter.com/thepizzadao",
