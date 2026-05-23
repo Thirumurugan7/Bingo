@@ -148,6 +148,19 @@ export async function findQuestsByRoomId(roomId: string) {
   return quests.map(toId);
 }
 
+export async function deleteQuest(questId: string, roomId: string) {
+  const db = await getDb();
+  const quest = await findQuestByIdAndRoom(questId, roomId);
+  if (!quest) return false;
+
+  await db.collection<QuestCompletionDoc>("questCompletions").deleteMany({ questId });
+  const result = await db.collection<QuestDoc>("quests").deleteOne({
+    _id: parseId(questId),
+    roomId,
+  });
+  return result.deletedCount === 1;
+}
+
 export async function createQuest(data: {
   roomId: string;
   title: string;

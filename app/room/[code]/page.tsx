@@ -41,6 +41,7 @@ export default function RoomPage({ params }: { params: Promise<{ code: string }>
   const [questDescription, setQuestDescription] = useState("");
   const [questUrl, setQuestUrl] = useState("");
   const [questSaving, setQuestSaving] = useState(false);
+  const [deletingQuestId, setDeletingQuestId] = useState<string | null>(null);
   const [questError, setQuestError] = useState("");
 
   const joinUrl = typeof window !== "undefined" ? `${window.location.origin}/join/${code}` : "";
@@ -130,6 +131,25 @@ export default function RoomPage({ params }: { params: Promise<{ code: string }>
     setQuestUrl("");
     setShowAddQuest(false);
     setQuestSaving(false);
+  }
+
+  async function handleDeleteQuest(questId: string, title: string) {
+    if (!window.confirm(`Remove quest "${title}"?`)) return;
+    setDeletingQuestId(questId);
+    setQuestError("");
+    const res = await fetch(`/api/rooms/${code}/quests/${questId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: hostPassword }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      setQuestError(data.error ?? "Failed to delete quest");
+      setDeletingQuestId(null);
+      return;
+    }
+    setRoom(data);
+    setDeletingQuestId(null);
   }
 
   async function handleStart() {
@@ -406,6 +426,10 @@ export default function RoomPage({ params }: { params: Promise<{ code: string }>
             </button>
           </div>
 
+          {questError && (
+            <p className="text-sm mb-3" style={{ color: "var(--pizza-red)" }}>⚠ {questError}</p>
+          )}
+
           {showAddQuest && (
             <div
               className="mb-4 p-4 space-y-3"
@@ -445,9 +469,6 @@ export default function RoomPage({ params }: { params: Promise<{ code: string }>
                   onKeyDown={(e) => e.key === "Enter" && handleAddQuest()}
                 />
               </div>
-              {questError && (
-                <p className="text-sm" style={{ color: "var(--pizza-red)" }}>⚠ {questError}</p>
-              )}
               <button
                 type="button"
                 className="btn-primary py-2 px-4"
@@ -468,20 +489,35 @@ export default function RoomPage({ params }: { params: Promise<{ code: string }>
               {room.quests.map((q) => (
                 <div
                   key={q.id}
-                  className="p-3"
+                  className="p-3 flex items-start justify-between gap-3"
                   style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--pizza-border)" }}
                 >
-                  <div className="font-bold text-sm" style={{ color: "var(--pizza-gold)" }}>
-                    {q.title}
+                  <div className="min-w-0 flex-1">
+                    <div className="font-bold text-sm" style={{ color: "var(--pizza-gold)" }}>
+                      {q.title}
+                    </div>
+                    <div className="text-xs mt-1" style={{ color: "var(--pizza-muted)" }}>
+                      {q.description}
+                    </div>
+                    {q.url && (
+                      <p className="text-xs mt-2 truncate" style={{ color: "var(--pizza-orange)" }}>
+                        {q.url}
+                      </p>
+                    )}
                   </div>
-                  <div className="text-xs mt-1" style={{ color: "var(--pizza-muted)" }}>
-                    {q.description}
-                  </div>
-                  {q.url && (
-                    <p className="text-xs mt-2 truncate" style={{ color: "var(--pizza-orange)" }}>
-                      {q.url}
-                    </p>
-                  )}
+                  <button
+                    type="button"
+                    className="font-malam shrink-0 py-1 px-2 text-xs tracking-widest uppercase"
+                    style={{
+                      border: "1px solid var(--pizza-red)",
+                      color: "var(--pizza-red)",
+                      opacity: deletingQuestId === q.id ? 0.5 : 1,
+                    }}
+                    onClick={() => handleDeleteQuest(q.id, q.title)}
+                    disabled={deletingQuestId !== null}
+                  >
+                    {deletingQuestId === q.id ? "..." : "Remove"}
+                  </button>
                 </div>
               ))}
             </div>
